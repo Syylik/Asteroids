@@ -12,7 +12,22 @@ namespace Asteroids.Model
         private readonly float _secondsToStop = 1f;
         private readonly float _degreesPerSecond = 180;
 
+        public int _health = 3;
+
+        public event Action OnDead;
+        public event Action<int> OnHealthChanged;
+
         public Vector2 Acceleration { get; private set; }
+
+        public void DecreaseHealth(int decreaseCount)
+        {
+            if(_health <= 0) throw new Exception("Health less than 0");
+
+            _health -= decreaseCount;
+            OnHealthChanged?.Invoke(_health);
+
+            if(_health == 0) OnDead?.Invoke();
+        }
 
         public void Accelerate(float deltaTime)
         {

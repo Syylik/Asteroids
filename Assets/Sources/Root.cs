@@ -1,4 +1,5 @@
 using Asteroids.Model;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -47,7 +48,16 @@ public class Root : MonoBehaviour
 
         _baseGun.Shot += OnShot;
         _laserGun.Shot += OnShot;
+
+        _shipModel.OnDead += OnShipDead;
         _shipModel.Destroying += OnShipDestroying;
+    }
+
+    private void OnShipDead()
+    {
+        DisableShip();
+        _shipPresenter.Deactivate();
+        OnShipDestroying();
     }
 
     private void OnDisable()
@@ -56,6 +66,8 @@ public class Root : MonoBehaviour
 
         _baseGun.Shot -= OnShot;
         _laserGun.Shot -= OnShot;
+
+        _shipModel.OnDead -= OnShipDead;
         _shipModel.Destroying -= OnShipDestroying;
     }
 
